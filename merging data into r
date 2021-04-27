@@ -1,0 +1,128 @@
+data1 <- data.frame(id = 1:6,
+                    x1 = c(5,1,4,9,1,2),
+                    x2 = c("A","Y","G","F","Y","G"))
+data2 <- data.frame(id = 4:9,
+                    y1 = c(3,3,4,1,2,9),
+                    y2 = c("a","x","a","x","a","y"))
+merge(data1, data2, by = "id") #merge data frames by coloumns names
+merge(data1, data2, by = "id", all.x = TRUE) # keep all rows of x data
+merge(data1, data2, by = "id", all.y = TRUE) #keep all rows of y data
+h <- merge(data1, data2, by = "id", all.x = TRUE, all.y = TRUE)
+clean <- h[is.na(h)] <- 0
+clean
+data3 <- data.frame(id = 5:6,
+                    z1 = c(3,2),
+                    z2 = "a","b")
+data12 <- merge(data1, data2)
+merge(data12, data3, by = "id")
+#------rbind and rbind fill------------------------
+data("iris")
+head(iris)
+data_new <- data.frame(Sepal.Length = c(7.3,5.5),
+                       Sepal.Width = c(2.2,3.3),
+                       Petal.Length = c(10,20),
+                       Petal.Width = c(0.1,0.1),
+                       Species = factor(c("new", "new2")))
+iris_new <- rbind(iris, data_new)
+tail(iris_new)
+#---------------------------------------------------------
+install.packages("plyr")
+library("plyr")
+data_new_2 <- data.frame(Sepal.Length = c(7.3,5.5),
+                       Sepal.Width = c(2.2,3.3),
+                       Petal.Length = c(10,20),
+                       Petal.Width = c(0.1,0.1))
+ iris_new_2 <- rbind.fill(iris, data_new_2)
+tail(iris_new_2)
+#------------------merging data frame by row names--------
+data4 <- data.frame(x1 = c(5,1,4,9,1,2),
+                    x2 = c("A","Y","G","F","G","Y"))
+data5 <- data.frame(y1 = c(3,3,4,1,2,9),
+                    y2 = c("a","y","g","f","g","y"))
+rownames(data5) <- 3:8
+data5
+colnames(data5) <- c("z23", "r23")
+data5
+merge(data4, data5, by = 0) # only that row will come which is
+# common in both data set.
+#---------merge multiple data frames in r--------------
+data1 <- data.frame(id = 1:6,
+                    x1 = c(5,1,4,9,1,2),
+                    x2 = c("A","Y","G","F","Y","G"))
+data2 <- data.frame(id = 4:9,
+                    y1 = c(3,3,4,1,2,9),
+                    y2 = c("a","x","a","x","a","y"))
+data3 <- data.frame(id = 5:6,
+                    z1 = c(3,2),
+                    z2 = "a","b")
+data_list <- list(data1, data2, data3)
+my_merge <- function(df1,df2) {
+  merge (df1, df2, by = "id")
+}
+Reduce(my_merge, data_list)
+data_list %>% reduce(inner_join, by = "id")
+#--------merging data list---------------
+list1 <- list(A = "A1", B = "B1", C = "C1")
+list2 <- list(A = "A2", B = "B2", C = "C2")
+list12 <- Map(c, list1, list2)
+list12
+#---------------combining list into r---------------
+list3 <- list(A = "A1", B = "B1", C = "C1")
+list4 <- list(x = 1:3, y = 10:5)
+list34 <- list(list3, list4)
+list34
+append(list3,list4)
+#----------bind_rows and bind_cols--------------------
+data5 <- data.frame(x1 = 1:5,
+                    x2 = letters[1:5])
+data6 <- data.frame(x1 = 0,
+                    x3 = 5:9)
+data7 <- data.frame(x3 = 5:9,
+                    x4 = letters[5:9])
+bind_rows(data5, data6)
+bind_cols(data5, data7)
+#---c bind is base function while bind_cols is dplyr tool----
+data8 <- data.frame(x1 = c(7,3,2,9,0),
+                    x2 = c(4,4,1,1,8),
+                    x3 = c(5,3,9,2,4))
+y1 <- c(9,8,7,6,5)
+data_new_3 <- cbind(data8, y1)
+data9 <- data.frame(z1 = c(1,6,9,4,0),
+                    z2 = c(0,9,8,1,6))
+data_new_4 <- cbind(data8, data9)
+data_new_5 <- cbind(data8, y1, data9)
+#------add coloumn to data frame in r---------------
+data10 <- data.frame(x1 = 1:5,
+                     x2 = letters[1:5])
+vec <- c(3,2,3,2,3)
+data_new_6 <- data10
+data_new_6$new_col <- vec #example1 
+data_new_7 <- data10
+data_new_7["new_col"] <- vec #example2
+data_new_8 <- cbind(data10,new_col=vec)
+data_new_8
+data_new_6
+data_new_7
+#---------add new row to dataframe-----------
+data11 <- data.frame(x1 = 1:4,
+                     x2 = 4:1,
+                     x3 = 1)
+new_row <- c(77,78,79,80)
+data_new_9 <- rbind(data11, new_row) # exaple 1
+data_new_10 <- data11
+data_new_10[nrow(data11) + 1, ] <- new_row
+#-----------merging data frames by two id-----------
+data13 <- data.frame(ID1 = 1:5,
+                     ID2 = letters[1:5],
+                     x1 = c(4,1,6,7,8),
+                     x2 = 9)
+data14 <- data.frame(ID1 = 3:7,
+                     ID2 = letters[3:7],
+                     y1 = c(4,4,5,1,1),
+                     y2 = 5)
+data_merge_1 <- merge(data13, data14, by = c("ID1", "ID2"))
+library(dplyr)
+data_merge_2 <- inner_join(data13, data14, by = c("ID1", "ID2"))
+data_merge_1
+data_merge_2
+
